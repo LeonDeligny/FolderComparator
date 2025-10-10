@@ -1,9 +1,9 @@
 import os
 
-from src.foldercomparator.utils import calculate_hash
-from src.foldercomparator.excluded import is_excluded
+from foldercomparator.utils import calculate_hash
+from foldercomparator.excluded import is_excluded
 
-from src.foldercomparator import (
+from foldercomparator import (
     REPORT_IDENTICAL,
     REPORT_EXCLUDED,
     REPORT_COMPARE_ERROR,

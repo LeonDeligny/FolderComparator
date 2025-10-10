@@ -1,6 +1,6 @@
 import os
 
-from src.foldercomparator.utils import format_size_human_readable
+from foldercomparator.utils import format_size_human_readable
 
 
 def print_report(

@@ -71,18 +71,18 @@ import os
 import sys
 import time
 
-from src.foldercomparator.arguments import get_arguments
-from src.foldercomparator.utils import get_formatted_dates
-from src.foldercomparator.printreport import print_report
-from src.foldercomparator.scan import (
+from foldercomparator.arguments import get_arguments
+from foldercomparator.utils import get_formatted_dates
+from foldercomparator.printreport import print_report
+from foldercomparator.scan import (
     scan_folder,
     compare_scanned_items,
 )
-from src.foldercomparator.excluded import (
+from foldercomparator.excluded import (
     compile_exclusion_patterns,
 )
 
-from src.foldercomparator import (
+from foldercomparator import (
     REPORT_BROKEN_SYMLINK_SOURCE,
     REPORT_BROKEN_SYMLINK_TARGET,
     REPORT_COMPARE_ERROR,
@@ -95,6 +95,7 @@ from src.foldercomparator import (
     REPORT_ONLY_IN_TARGET,
 )
 
+from . import MIN_PYTHON_VERSION
 
 def main():
 
