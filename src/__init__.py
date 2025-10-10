@@ -1,2 +1,1 @@
 
-MIN_PYTHON_VERSION = (3, 8)

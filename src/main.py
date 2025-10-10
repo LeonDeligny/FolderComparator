@@ -95,8 +95,6 @@ from foldercomparator import (
     REPORT_ONLY_IN_TARGET,
 )
 
-from . import MIN_PYTHON_VERSION
-
 def main():
 
     start_time_cpu = time.perf_counter() # Use perf_counter for CPU time
