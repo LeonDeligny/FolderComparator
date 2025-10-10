@@ -33,4 +33,3 @@ Règles pour les Motifs d'Exclusion (file2exclude.txt)
 
 8. Sensibilité à la Casse :
 	- Les motifs sont sensibles à la casse (par exemple, TEMP/ n'exclura pas temp/). C'est le comportement par défaut des expressions régulières Python.
-
