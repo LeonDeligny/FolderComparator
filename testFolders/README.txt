@@ -1,5 +1,4 @@
-PYTHONPATH=. python3.11 src/main.py --exclude-file testFolders/files2exclude_a.txt --time-tolerance 1 -- testFolders/source_dir/ testFolders/target_dir/ > testFolders/hash-check_off_files2exclude_a2.log
-cd testFolders
+python3.11 src/main.py --exclude-file testFolders/files2exclude_a.txt --time-tolerance 1 --hash-check -- testFolders/source_dir/ testFolders/target_dir/ > testFolders/hash-check_off_files2exclude_a2.logcd testFolders
 
 Using files2exclude_a.txt
 -------------------------
