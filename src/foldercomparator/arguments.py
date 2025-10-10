@@ -1,5 +1,8 @@
---- folder_comparator_v26.00.py Part 08/12
-def getArguments():
+import textwrap
+import argparse
+
+
+def get_arguments():
     """
     Sets up and parses command-line arguments for the folder comparison tool.
 
@@ -12,20 +15,20 @@ def getArguments():
     main_description_wrapped = textwrap.fill(main_description_raw, width=WRAP_WIDTH)
 
     comparison_logic_raw = """
-File Comparison Logic:
-1. Initial Size Comparison:
-   - If file sizes differ, files are immediately classified as "DIFFERENT_CONTENT".
-     They are then differentiated by "SOURCE is newer" or "TARGET is newer" based on their modification time (mtime).
-2. Modification Time (mtime) Comparison (if sizes are identical):
-   - If abs(source_mtime - target_mtime) <= --time-tolerance (mtime within tolerance):
-     - If --hash-check is NOT specified: Files are classified as "IDENTICAL".
-     - If --hash-check IS specified: A hash check is performed.
-       - If hashes are identical: Files are classified as "IDENTICAL".
-       - If hashes are different: Files are classified as "DIFFERENT_CONTENT" (and differentiated by mtime).
-   - If abs(source_mtime - target_mtime) > --time-tolerance (mtime OUTSIDE tolerance):
-     - Files are classified as "DIFFERENT_CONTENT" (and differentiated by mtime).
-     - A hash check is NOT performed, as the mtime difference is sufficient to mark them as different.
-"""
+        File Comparison Logic:
+        1. Initial Size Comparison:
+        - If file sizes differ, files are immediately classified as "DIFFERENT_CONTENT".
+            They are then differentiated by "SOURCE is newer" or "TARGET is newer" based on their modification time (mtime).
+        2. Modification Time (mtime) Comparison (if sizes are identical):
+        - If abs(source_mtime - target_mtime) <= --time-tolerance (mtime within tolerance):
+            - If --hash-check is NOT specified: Files are classified as "IDENTICAL".
+            - If --hash-check IS specified: A hash check is performed.
+            - If hashes are identical: Files are classified as "IDENTICAL".
+            - If hashes are different: Files are classified as "DIFFERENT_CONTENT" (and differentiated by mtime).
+        - If abs(source_mtime - target_mtime) > --time-tolerance (mtime OUTSIDE tolerance):
+            - Files are classified as "DIFFERENT_CONTENT" (and differentiated by mtime).
+            - A hash check is NOT performed, as the mtime difference is sufficient to mark them as different.
+    """
     
     wrapped_comparison_logic_lines = []
     for line in comparison_logic_raw.splitlines():
@@ -50,7 +53,7 @@ File Comparison Logic:
         'usage: %(prog)s [-h] [--ignore-case]\n'
         '                                  [--exclude [EXCLUDE [EXCLUDE ...]]]\n'
         '                                  [--exclude-file EXCLUDE_FILE]\n'
-        '                                  [--time-tolerance TIME_TOLERANCE in second]\n'
+        '                                  [--time-tolerance TIME_TOLERANCE]\n'
         '                                  [--hash-check [{md5,sha256}]]\n'
         '                                  [--debug-exclude]\n'
         '                                  [--debug-exclude-filter-patterns [DEBUG_EXCLUDE_FILTER_PATTERNS [DEBUG_EXCLUDE_FILTER_PATTERNS ...]]]\n'
@@ -92,6 +95,3 @@ File Comparison Logic:
                         help="When --debug-exclude is enabled, only print debug messages for paths containing one of these substring patterns (e.g., '.aienv*' '.texlive*').")
 
     return parser.parse_args()
-
-
-# --- Formatin date Function ---
