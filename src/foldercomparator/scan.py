@@ -27,7 +27,14 @@ class ScannedItem:
         self.symlink_target = symlink_target # Stores the target path if it's a symlink
 
 
-def scan_folder(root_path, comparison_results_dict, is_source_scan_flag, ignore_case):
+def scan_folder(
+                    compiled_file_patterns_global,
+                compiled_dir_patterns_global,
+                compiled_root_specific_file_patterns_global,
+                compiled_root_specific_dir_patterns_global,
+                debug_exclude,
+                debug_target,
+    root_path, comparison_results_dict, is_source_scan_flag, ignore_case):
     # This function now directly populates comparison_results_dict for all categories
 
     current_scan_folder_basename = os.path.basename(root_path)
@@ -77,7 +84,14 @@ def scan_folder(root_path, comparison_results_dict, is_source_scan_flag, ignore_
                     continue
 
             # --- Check for exclusion ---
-            is_excluded_flag, matched_pattern = is_excluded(relative_path_with_sep, True, current_scan_folder_basename)
+            is_excluded_flag, matched_pattern = is_excluded(
+                compiled_file_patterns_global,
+                compiled_dir_patterns_global,
+                compiled_root_specific_file_patterns_global,
+                compiled_root_specific_dir_patterns_global,
+                debug_exclude,
+                debug_target,
+                relative_path_with_sep, True, current_scan_folder_basename)
             if is_excluded_flag:
                 if DEBUG_EXCLUDE_ENABLED:
                     print(f"DEBUG EXCLUDE (DIR): {current_scan_folder_basename} - '{relative_path_with_sep}' matched by '{matched_pattern}'")
@@ -126,7 +140,14 @@ def scan_folder(root_path, comparison_results_dict, is_source_scan_flag, ignore_
                     continue
 
             # --- Check for exclusion ---
-            is_excluded_flag, matched_pattern = is_excluded(relative_path, False, current_scan_folder_basename)
+            is_excluded_flag, matched_pattern = is_excluded(
+                compiled_file_patterns_global,
+                compiled_dir_patterns_global,
+                compiled_root_specific_file_patterns_global,
+                compiled_root_specific_dir_patterns_global,
+                debug_exclude,
+                debug_target,
+                relative_path, False, current_scan_folder_basename)
             if is_excluded_flag:
                 if DEBUG_EXCLUDE_ENABLED:
                     print(f"DEBUG EXCLUDE (FILE): {current_scan_folder_basename} - '{relative_path}' matched by '{matched_pattern}'")

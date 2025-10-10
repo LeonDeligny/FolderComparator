@@ -1,3 +1,72 @@
+'''
+# --- Script Description ---
+#
+SCRIPT_VERSION = "v25.06"
+SCRIPT_DATE    = "14-July-2025"
+#
+# A. Gehri/Gemini
+#
+# This script compares two folders (source and target) to identify and report
+# on items based on their existence, modification dates, and size.
+#
+# It provides a detailed report on the following exclusive categories:
+#  1. Broken symbolic links found in the source folder.
+#  2. Broken symbolic links found in the target folder.
+#  3. Files existing only in the source folder.
+#  4. Files existing only in the target folder.
+#  5. Files existing in both source and target that are considered IDENTICAL.
+#     - Identical means: (a) sizes are identical AND (b) timestamps are within
+#       a user-defined time tolerance.
+#     - An optional hash check (--hash-check) can be enabled for stricteri
+#       identity verification, in which case files are identical ONLY if
+#       their content hashes match (along with size).
+#  6. Files existing in both source and target, which are DIFFERENT, andi
+#     source is newer.
+#  7. Files existing in both source and target, which are DIFFERENT, and
+#     target is newer.
+#  8. Files/Folders excluded based on --exclude patterns
+#  9. Items that have different types (File/Folder) in Source an Target
+# 10. Items for which an error has occurred during comparison
+#
+# The report includes the count and total size for each file category.
+# Users can specify patterns to exclude certain files or folders from the
+# comparison, either directly via command-line arguments or by providing a
+# file containing the patterns.
+#
+# Usage examples:
+# ---------------
+# python3 folder_comparator.py --exclude "*.log", "toto/activate*", "temp_dir/" -- source_dir target_dir
+# python3 folder_comparator.py --exclude-file my_exclusions.txt --time-tolerance 0.1 -hash-check md5 -- source_dir target_dir
+#
+# Note on timestamps (modification time):
+# ---------------------------------------
+# Sometimes, when manipulating files, the modification timestamp may be rounded
+# to the nearest second, in which case the use of --time-tolerance 1 should
+# indicate that such files should be treated as identical.
+#
+# Note on the logic for size calculation:
+# ---------------------------------------
+# For reporting and comparison purposes, item sizes are handled as follows:
+#   - Regular Files: Their actual byte size is used.
+#   - Directories: Have no meaningful "content size" in bytes.
+#                  Their size is recorded as 'None' during scanning and
+#                  displayed as 'None bytes' in the report.
+#                  They are not included in total size sums.
+#   - Symbolic Links: The size recorded is the actual size of the symlink
+#                     entry itself (i.e., the byte length of the target
+#                     path string it contains), not the size of its target.
+#                     This size is a numerical value, displayed as 'XX bytes',
+#                     and included in total size sums where applicable.
+#   - Broken symlinks are reported separately and do not have a size
+#     associated for comparison.
+# This approach ensures clear distinction between actual file content size,
+# the conceptual 'size' of directories, and the true footprint of symlinks.
+
+#
+# --- End of Script Description ---
+
+'''
+
 import os
 import sys
 import time
@@ -26,12 +95,19 @@ from src.foldercomparator import (
     REPORT_ONLY_IN_TARGET,
 )
 
+
 def main():
 
     start_time_cpu = time.perf_counter() # Use perf_counter for CPU time
     local_date_str, _ = get_formatted_dates()
 
     all_exclude_patterns = []
+    
+    # --- Global variables for optimization and debugging ---
+    compiled_file_patterns_global = []
+    compiled_dir_patterns_global = []
+    compiled_root_specific_file_patterns_global = []
+    compiled_root_specific_dir_patterns_global = []
 
     # Initialize the dictionary to store comparison results
     comparison_results_dict = {
@@ -91,7 +167,7 @@ def main():
     
     # Compile patterns once before comparison starts
     # This call sets patterns_compiled_flag = True and populates global lists
-    _, _ = compile_exclusion_patterns(
+    compiled_file_patterns_global, compiled_dir_patterns_global = compile_exclusion_patterns(
         debug_exclude=debug_exclude,
         debug_target=debug_target,
         patterns_list=all_exclude_patterns,
@@ -99,8 +175,22 @@ def main():
 
     # Perform initial scans to populate broken symlinks and excluded items
     # and get lists of non-excluded items for comparison
-    source_items_scanned = scan_folder(source_folder_cleaned, comparison_results_dict, True, args.ignore_case)
-    target_items_scanned = scan_folder(target_folder_cleaned, comparison_results_dict, False, args.ignore_case)
+    source_items_scanned = scan_folder(
+                        compiled_file_patterns_global,
+                compiled_dir_patterns_global,
+                compiled_root_specific_file_patterns_global,
+                compiled_root_specific_dir_patterns_global,
+                debug_exclude,
+                debug_target,
+source_folder_cleaned, comparison_results_dict, True, args.ignore_case)
+    target_items_scanned = scan_folder(
+                        compiled_file_patterns_global,
+                compiled_dir_patterns_global,
+                compiled_root_specific_file_patterns_global,
+                compiled_root_specific_dir_patterns_global,
+                debug_exclude,
+                debug_target,
+            target_folder_cleaned, comparison_results_dict, False, args.ignore_case)
 
     # Perform comparison of non-excluded items
     compare_scanned_items(source_items_scanned, target_items_scanned, comparison_results_dict, args.time_tolerance, args.hash_check)

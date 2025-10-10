@@ -11,14 +11,8 @@ REPORT_EXCLUDED = "Excluded Files/Folders (based on --exclude patterns)."
 REPORT_DIFFERENT_TYPE = "Items with Different Type (File vs. Folder) found in both Source and Target."
 REPORT_COMPARE_ERROR = "Comparison Errors."
 
-# --- Global variables for optimization and debugging ---
-compiled_file_patterns_global = []
-compiled_dir_patterns_global = []
-compiled_root_specific_file_patterns_global = []
-compiled_root_specific_dir_patterns_global = []
 patterns_compiled_flag = False
 DEBUG_EXCLUDE_ENABLED = False
-DEBUG_TARGET_PATTERNS = [] # Populated from args
 
 # --- Gloabl variables related to the exclusions patterns
 num_patterns_from_exclude_file = 0
