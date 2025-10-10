@@ -1,0 +1,84 @@
+#
+# =============================================================================
+#
+# EXCLUDE_FILE to use with option --exclude-file of folder_comparator.py script
+#
+# SOURCE_DIR = source_dir/
+# TARGET_DIR = target_dir/
+#
+# =============================================================================
+
+# To exclude only inside the sub-folder toto/
+# -------------------------------------------
+**/toto/activate*
+**/toto/.alias*
+**/toto/deactivate*
+**/toto/help_me.txt
+**/toto/.nvidia-settings-rc
+**/toto/.setenv
+**/toto/.setenv.bu
+**/toto/.ssh/
+**/toto/.tcshrc
+**/toto/venv_p3/
+**/toto/virtualenv/
+
+# To exclude everywhere 
+# ---------------------
+**/.aienv*_cache/
+**/.ansys/
+**/*.bash_*
+**/*.cache/
+**/.cinnamon/
+**/.config/
+**/.cups/
+**/.davfs2/
+**/.dbus/
+**/.dmrc
+**/.dropbox*
+**/Dropbox/
+**/Desktop/
+**/.emacs.d/
+**/.esd_auth
+**/.esmtp_queue/
+**/.gconf/
+**/.gimp*/
+**/.gnome*/
+**/.gnupg/
+**/google-earth/
+**/.gphoto/
+**/GPUCache/
+**/.gstreamer-0.10/
+**/.gtk*/
+**/.gvfs/
+**/.history
+**/.ICEauthority
+**/.icons/
+**/.kde*/
+**/Library/
+**/.local/
+**/.login
+**/lost+found/
+**/.luckyBackup/
+**/mnt/
+**/.mozilla
+**/.nedit/
+**/nextcloud/
+**/.nv/
+**/.oracle_jre_usage/
+**/.pki/
+**/.pulse*
+**/.sbd/
+**/.serverauth*
+**/.python_history
+**/.skel/
+**/snap/
+**/.texlive*
+**/thinclient_drives/
+**/.thumbnails/
+**/.var/
+**/.vmware/
+**/.vnc/
+**/.tk_recent_files
+**/.Xauthority*
+**/.xmaximarc
+**/.xsession-errors

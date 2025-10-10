@@ -1,0 +1,22 @@
+# List of files/Folders to be excluded according to "files2exclude_?.txt"
+-------------------------------------------------------------------------
+
+source_dir/toto/activate-smr2.csh
+source_dir/toto/.alias.csh
+source_dir/toto/.aienv_fea2.019.2_cache/
+#source_dir/toto/.aienv_fea2.019.2_cache/ai_env.cache
+source_dir/toto/.aienv_fea2.021.2_cache/
+#source_dir/toto/.aienv_fea2.021.2_cache/ai_env.cache
+source_dir/toto/.aienv_fea2.019.4_cache/
+#source_dir/toto/.aienv_fea2.019.4_cache/ai_env.cache
+
+target_dir/toto/.alias.csh
+target_dir/toto/.tcshrc
+target_dir/toto/.texlive2018/
+#target_dir/toto/.texlive2018/texmf-var
+#target_dir/toto/.texlive2018/texmf-var/web2c
+#target_dir/toto/.texlive2018/texmf-var/web2c/pdftex
+#target_dir/toto/.texlive2018/texmf-var/web2c/pdftex/latex.log
+#target_dir/toto/.texlive2018/texmf-var/web2c/pdftex/pdflatex.log
+#target_dir/toto/.texlive2018/texmf-var/web2c/pdftex/pdflatex.fmt
+#target_dir/toto/.texlive2018/texmf-var/web2c/pdftex/latex.fmt

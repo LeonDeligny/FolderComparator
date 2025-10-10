@@ -1,0 +1,134 @@
+
+Scanning folder           : /home/gehri/sources/tools/python_scripts/folder_comparator/testFolders/source_dir ...
+Finished scanning folders
+
+Scanning folder           : /home/gehri/sources/tools/python_scripts/folder_comparator/testFolders/target_dir ...
+Finished scanning folders
+
+Comparing items ...
+Finished comparing items
+
+================================================================================
+--------------------------- Folder Comparison Report ---------------------------
+================================================================================
+
+Date                               : Thu Jul 17 19:31:28 UTC+7 2025
+folder_comparator.py               : version v26.00 (16-July-2025)
+source_dir                         : /home/gehri/sources/tools/python_scripts/folder_comparator/testFolders/source_dir
+target_dir                         : /home/gehri/sources/tools/python_scripts/folder_comparator/testFolders/target_dir
+Time Tolerance for IDENTICAL Files : 1.0 seconds
+Hash Check                         : Disabled (Files considered IDENTICAL based
+                                     on identical size and timestamp within
+                                     tolerance)
+Exclusion patterns loaded from file: files2exclude_a.txt (69 patterns)
+Total exclusion patterns in effect : 69 patterns
+**/toto/activate*, **/toto/.alias*, **/toto/deactivate*, **/toto/help_me.txt, **/toto/.nvidia-settings-rc, **/toto/.setenv, **/toto/.setenv.bu, **/toto/.ssh/, **/toto/.tcshrc, **/toto/venv_p3/, **/toto/virtualenv/, **/.aienv*_cache/, **/.ansys/, **/*.bash_*, **/*.cache/, **/.cinnamon/, **/.config/, **/.cups/, **/.davfs2/, **/.dbus/, **/.dmrc, **/.dropbox*, **/Dropbox/, **/Desktop/, **/.emacs.d/, **/.esd_auth, **/.esmtp_queue/, **/.gconf/, **/.gimp*/, **/.gnome*/, **/.gnupg/, **/google-earth/, **/.gphoto/, **/GPUCache/, **/.gstreamer-0.10/, **/.gtk*/, **/.gvfs/, **/.history, **/.ICEauthority, **/.icons/, **/.kde*/, **/Library/, **/.local/, **/.login, **/lost+found/, **/.luckyBackup/, **/mnt/, **/.mozilla, **/.nedit/, **/nextcloud/, **/.nv/, **/.oracle_jre_usage/, **/.pki/, **/.pulse*, **/.sbd/, **/.serverauth*, **/.python_history, **/.skel/, **/snap/, **/.texlive*, **/thinclient_drives/, **/.thumbnails/, **/.var/, **/.vmware/, **/.vnc/, **/.tk_recent_files, **/.Xauthority*, **/.xmaximarc, **/.xsession-errors
+
+Note on Size Calculation Logic:
+- Regular Files  :  Their actual byte size is used.
+- Directories    :  Have no meaningful 'content size' in bytes.
+                    Their size is recorded as 'None' during scanning and
+                    displayed as 'None bytes' in the report.
+                    They are not included in total size sums.
+- Symbolic Links :  The size recorded is the actual size of the symlink
+                    entry itself (i.e., the byte length of the target
+                    path string it contains), not the size of its target.
+                    This size is a numerical value, displayed as 'XX bytes',
+                    and included in total size sums where applicable.
+
+--------------------------------------------------------------------------------
+
+ 1. Broken Symlinks in source_dir
+    Total: 2 items, size 0 Bytes (0 directories, 2 files)
+      toto/link1 (size: None bytes)
+      toto/s1/link2 (size: None bytes)
+
+ 2. Broken Symlinks in target_dir
+    Total: 2 items, size 0 Bytes (0 directories, 2 files)
+      toto/link1 (size: None bytes)
+      toto/t1/link1 (size: None bytes)
+
+ 3. Items existing ONLY in source_dir
+    Total: 0 items
+
+ 4. Items existing ONLY in target_dir
+    Total: 0 items
+
+ 5. Items existing in source_dir AND target_dir that are IDENTICAL
+    (same size AND timestamps within tolerance, NO HASH-CHECK.)
+    Total: 3 items, size 60.3 MB (0 directories, 3 files)
+      toto/diffMtime0.8-contentDiff.txt (size: 2.0 Bytes)
+      toto/diffMtime0.8.txt (size: 0 Bytes)
+      toto/log16 (size: 60.3 MB)
+
+ 6. Items existing in source_dir AND target_dir that are DIFFERENT and NEWER in source_dir
+    Total: 3 files, size 11.72 KB
+    Net change in target_dir size if old files were replaced by
+    new files from source_dir: 176.0 Bytes
+      toto (source size: None bytes, target size: None bytes)
+      toto/Snewer.txt (source size: 187.0 Bytes, target size: 11.0 Bytes)
+      toto/msort.F (source size: 11.54 KB, target size: 11.54 KB)
+
+ 7. Items existing in source_dir AND target_dir that are DIFFERENT and NEWER in target_dir
+    Total: 3 files, size 187.0 Bytes
+    Net change in source_dir size if old files were replaced by
+    new files from target_dir: 176.0 Bytes
+      folder1 (source size: None bytes, target size: None bytes)
+      folder2 (source size: None bytes, target size: None bytes)
+      toto/Tnewer.txt (source size: 11.0 Bytes, target size: 187.0 Bytes)
+
+ 8. Excluded Items
+    Total: 8 items, size 0 Bytes (2 directories, 6 files)
+    source_dir total: 2 items, size 0 Bytes (2 directories, 0 files)
+    target_dir total: 6 items, size 0 Bytes (0 directories, 6 files)
+      toto/.alias.csh (source size: None bytes, matched by 'None')
+      toto/.alias.csh (target size: None bytes, matched by 'None')
+      toto/.tcshrc (target size: None bytes, matched by 'None')
+      toto/.texlive2018/texmf-var/web2c/pdftex/latex.fmt (target size: None bytes, matched by 'None')
+      toto/.texlive2018/texmf-var/web2c/pdftex/latex.log (target size: None bytes, matched by 'None')
+      toto/.texlive2018/texmf-var/web2c/pdftex/pdflatex.fmt (target size: None bytes, matched by 'None')
+      toto/.texlive2018/texmf-var/web2c/pdftex/pdflatex.log (target size: None bytes, matched by 'None')
+      toto/activate-smr2.csh (source size: None bytes, matched by 'None')
+
+ 9. Items existing in source_dir AND target_dir that have DIFFERENT Type (File vs. Folder)
+    Total: 1 items, size 0 Bytes (1 directories, 0 files)
+      toto/abc (Source type: File/Symlink, Target type: Directory)
+
+10. Comparison Errors
+    Total: 29 items, size 0 Bytes (10 directories, 19 files)
+      toto/.aienv_fea2.019.2_cache (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.aienv_fea2.019.2_cache/ai_env.cache (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.aienv_fea2.019.4_cache (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.aienv_fea2.019.4_cache/ai_env.cache (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.aienv_fea2.021.2_cache (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.aienv_fea2.021.2_cache/ai_env.cache (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.aienv_options (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.aienv_options.211122.ok (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.aienv_options.dominique (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.aienv_options.jan (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.texlive2018 (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.texlive2018/texmf-var (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.texlive2018/texmf-var/web2c (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/.texlive2018/texmf-var/web2c/pdftex (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/TXT (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/s1 (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/s1/.alias.csh (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/s1/abc (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/s1/activate-smr2.csh (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/s1/log16 (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/s1/msort.F (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/s1/txt1 (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/t1 (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/t1/.alias.csh (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/t1/TXT1 (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/t1/abc (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/t1/log16 (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/t1/msort.F (Internal logic error: One item missing for comparison, despite prior checks.)
+      toto/txt (Internal logic error: One item missing for comparison, despite prior checks.)
+
+
+Total CPU elapsed wall clock time: 0.01 seconds
+
+================================================================================
+-------------------------------- End of Report ---------------------------------
+================================================================================

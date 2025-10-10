@@ -1,0 +1,97 @@
+--- folder_comparator_v26.00.py Part 05/12
+def is_excluded(relative_path: str, is_dir_item: bool, current_scan_folder_basename: str = None, is_source_item: bool = True):
+    """
+    Checks if an item (file or directory) should be excluded based on compiled patterns.
+    `relative_path` should be relative to the root of the scan (e.g., 'sub_dir/file.txt').
+    `current_scan_folder_basename` is the basename of the current scan root (e.g., 'toto' for /home/user/toto).
+    """
+    global compiled_file_patterns_global, compiled_dir_patterns_global
+    global compiled_root_specific_file_patterns_global, compiled_root_specific_dir_patterns_global
+    global DEBUG_EXCLUDE_ENABLED, DEBUG_TARGET_PATTERNS
+
+    # Normalize item_path for consistent matching (e.g., replace '\' with '/')
+    normalized_item_path = relative_path.replace(os.sep, '/')
+
+    # Activate verbose debug only if DEBUG_EXCLUDE_ENABLED is True and either
+    # DEBUG_TARGET_PATTERNS is empty (debug all) or the path contains a target pattern.
+    enable_verbose_debug = DEBUG_EXCLUDE_ENABLED and \
+                           (not DEBUG_TARGET_PATTERNS or any(target_str in normalized_item_path for target_str in DEBUG_TARGET_PATTERNS))
+
+    if enable_verbose_debug:
+        print(f"\n--- DEBUG EXCLUDE ---")
+        print(f"  Checking path: '{relative_path}' (Is Dir: {is_dir_item})")
+        print(f"  Normalized path for regex: '{normalized_item_path}'")
+        print(f"  Root Basename Context: '{current_scan_folder_basename}'")
+
+    # 1. Check root-specific patterns first (e.g., 'toto/activate*')
+    if current_scan_folder_basename: # Only proceed if root context is available
+        if is_dir_item:
+            for root_name, compiled_regex, original_glob in compiled_root_specific_dir_patterns_global:
+                if root_name == current_scan_folder_basename:
+                    # Match against the remainder of the path, relative to the root_name
+                    # e.g., for 'toto/activate*', normalized_item_path='activate-smr2.csh' or 'subdir/config/'
+                    if compiled_regex.match(normalized_item_path):
+                        if enable_verbose_debug:
+                            print(f"  -> EXCLUDED by ROOT_SPECIFIC_DIR pattern '{original_glob}' (regex '{compiled_regex.pattern}') on '{normalized_item_path}' for root '{current_scan_folder_basename}'")
+                        return True, original_glob
+        else: # is_file_item
+            for root_name, compiled_regex, original_glob in compiled_root_specific_file_patterns_global:
+                if root_name == current_scan_folder_basename:
+                    # Match against the remainder of the path, relative to the root_name
+                    if compiled_regex.match(normalized_item_path):
+                        if enable_verbose_debug:
+                            print(f"  -> EXCLUDED by ROOT_SPECIFIC_FILE pattern '{original_glob}' (regex '{compiled_regex.pattern}') on '{normalized_item_path}' for root '{current_scan_folder_basename}'")
+                        return True, original_glob
+
+    # 2. Check general patterns (starting with `**/` or general `filename`, `dir/`)
+    if is_dir_item:
+        for original_glob, compiled_regex in compiled_dir_patterns_global:
+            if enable_verbose_debug:
+                print(f"      ---> DEBUG: Checking against general DIR pattern: '{original_glob}'")
+                print(f"      ---> DEBUG:   Compiled REGEX: '{compiled_regex.pattern}'")
+                print(f"      ---> DEBUG:   Path to check: '{normalized_item_path}'")
+                match_obj = compiled_regex.match(normalized_item_path) # Use match() for start of string
+                print(f"      ---> DEBUG:   re.match result: {match_obj}")
+
+            if compiled_regex.match(normalized_item_path):
+                if enable_verbose_debug:
+                    print(f"  -> EXCLUDED by general DIR pattern '{original_glob}' (regex '{compiled_regex.pattern}') on '{normalized_item_path}'")
+                return True, original_glob
+    else: # is_file_item
+        for original_glob, compiled_regex in compiled_file_patterns_global:
+            if enable_verbose_debug:
+                print(f"      ---> DEBUG: Checking against general FILE pattern: '{original_glob}'")
+                print(f"      ---> DEBUG:   Compiled REGEX: '{compiled_regex.pattern}'")
+                print(f"      ---> DEBUG:   Path to check: '{normalized_item_path}'")
+                match_obj = compiled_regex.match(normalized_item_path) # Use match() for start of string
+                print(f"      ---> DEBUG:   re.match result: {match_obj}")
+
+            if compiled_regex.match(normalized_item_path):
+                if enable_verbose_debug:
+                    print(f"  -> EXCLUDED by general FILE pattern '{original_glob}' (regex '{compiled_regex.pattern}') on '{normalized_item_path}'")
+                return True, original_glob
+
+    if enable_verbose_debug:
+        print(f"  -> NOT EXCLUDED")
+    return False, None
+
+# --- Scanning and Comparison Logic ---
+
+# Helper class to store scanned item details
+class ScannedItem:
+    def __init__(self, full_path, is_dir, size, mtime_ns, is_symlink, symlink_target=None):
+        self.full_path = full_path
+        self.is_dir = is_dir
+        self.size = size
+        self.mtime_ns = mtime_ns # Use nanoseconds for precision, convert to seconds when needed
+        self.is_symlink = is_symlink
+        self.symlink_target = symlink_target # Stores the target path if it's a symlink
+
+        # Determine if the symlink is broken
+        if self.is_symlink:
+            # A symlink is considered broken if its target does not exist
+            self.is_broken_symlink = not os.path.exists(os.path.realpath(full_path))
+        else:
+            # Non-symlinks are never broken symlinks
+            self.is_broken_symlink = False
+

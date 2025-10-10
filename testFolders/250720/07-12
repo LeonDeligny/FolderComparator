@@ -1,0 +1,155 @@
+--- folder_comparator_v26.00.py Part 07/12
+def compare_scanned_items(source_items: dict, target_items: dict, comparison_results_dict: dict,
+                          time_tolerance_seconds: float, hash_algorithm: Optional[str] = None):
+
+    """
+    Compares the pre-scanned non-excluded items from source and target folders
+    and populates the comparison_results_dict according to the 10 categories.
+    """
+
+    print("Comparing items ...")
+
+    all_relative_paths = sorted(list(source_items.keys() | target_items.keys()))
+    hash_check_enabled = hash_algorithm is not None # True if a hash algorithm is provided, False otherwise
+
+    for relative_path in all_relative_paths:
+        source_scanned_item = source_items.get(relative_path)
+        target_scanned_item = target_items.get(relative_path)
+
+        # Create a new ComparisonItem for the current relative_path
+        comp_item = ComparisonItem(relative_path)
+
+        # Populate source-specific attributes from ScannedItem
+        if source_scanned_item:
+            comp_item.is_dir_source = source_scanned_item.is_dir
+            comp_item.size_source = source_scanned_item.size
+            comp_item.mtime_ns_source = source_scanned_item.mtime_ns
+            comp_item.is_symlink_source = source_scanned_item.is_symlink # Added from ScannedItem
+            comp_item.symlink_target_source = source_scanned_item.symlink_target # Added from ScannedItem
+            comp_item.is_broken_symlink_source = source_scanned_item.is_broken_symlink # Added from ScannedItem
+            # Note: source_scanned_item.full_path is used later for hash calculation
+
+        # Populate target-specific attributes from ScannedItem
+        if target_scanned_item:
+            comp_item.is_dir_target = target_scanned_item.is_dir
+            comp_item.size_target = target_scanned_item.size
+            comp_item.mtime_ns_target = target_scanned_item.mtime_ns
+            comp_item.is_symlink_target = target_scanned_item.is_symlink # Added from ScannedItem
+            comp_item.symlink_target_target = target_scanned_item.symlink_target # Added from ScannedItem
+            comp_item.is_broken_symlink_target = target_scanned_item.is_broken_symlink # Added from ScannedItem
+            # Note: target_scanned_item.full_path is used later for hash calculation
+
+        # 1. Handle Only in Source / Only in Target
+        # This block determines if an item is unique to source or target BEFORE
+        # attempting further comparisons.
+        if source_scanned_item and not target_scanned_item:
+            comparison_results_dict[REPORT_ONLY_IN_SOURCE].append(comp_item)
+            continue # Move to the next item in all_relative_paths
+        elif target_scanned_item and not source_scanned_item:
+            comparison_results_dict[REPORT_ONLY_IN_TARGET].append(comp_item)
+            continue # Move to the next item in all_relative_paths
+
+        # At this point, if we reach here, both source_scanned_item and target_scanned_item must exist.
+        # If they don't, it implies a logical inconsistency, which is then captured as an error.
+        if not source_scanned_item or not target_scanned_item:
+            # This case should ideally not be reached if the above logic is correct
+            # and source_items/target_items genuinely contain all_relative_paths.
+            comp_item.comparison_error_message = "Internal logic error: One item missing for comparison, despite prior checks."
+            comparison_results_dict[REPORT_COMPARE_ERROR].append(comp_item)
+            continue
+
+        # 2. Handle Different Type (File vs. Folder)
+        if source_scanned_item.is_dir != target_scanned_item.is_dir:
+            comp_item.type_mismatch_description = (
+                f"Source type: {'Directory' if source_scanned_item.is_dir else 'File/Symlink'}, "
+                f"Target type: {'Directory' if target_scanned_item.is_dir else 'File/Symlink'}"
+            )
+            comparison_results_dict[REPORT_DIFFERENT_TYPE].append(comp_item)
+            continue
+
+        # At this point, both are either files or both are directories (same type).
+
+        # 3. If both are directories
+        if source_scanned_item.is_dir and target_scanned_item.is_dir: # Both are directories
+            # Compare mtime for directories as well for consistent reporting
+            if comp_item.mtime_ns_source is None or comp_item.mtime_ns_target is None:
+                # If mtime_ns is missing for a directory, consider it different for now.
+                comp_item.comparison_error_message = "Directory mtime information missing"
+                comparison_results_dict[REPORT_COMPARE_ERROR].append(comp_item)
+                continue # Move to next item
+
+            mtime1_s = comp_item.mtime_ns_source / 1_000_000_000
+            mtime2_s = comp_item.mtime_ns_target / 1_000_000_000
+
+            if abs(mtime1_s - mtime2_s) <= time_tolerance_seconds:
+                # mtime within tolerance, consider directories identical
+                comparison_results_dict[REPORT_IDENTICAL].append(comp_item)
+            elif comp_item.mtime_ns_source > comp_item.mtime_ns_target:
+                # Source directory is newer (mtime outside tolerance)
+                comparison_results_dict[REPORT_DIFFERENT_CONTENT_SOURCE_NEWER].append(comp_item)
+            else:
+                # Target directory is newer (mtime outside tolerance)
+                comparison_results_dict[REPORT_DIFFERENT_CONTENT_TARGET_NEWER].append(comp_item)
+            continue
+
+        # At this point, both are files (or symlinks treated as files).
+
+        try:
+            # 4. Compare Files - Size
+            if comp_item.size_source is None or comp_item.size_target is None:
+                comp_item.comparison_error_message = "File size information missing during comparison"
+                comparison_results_dict[REPORT_COMPARE_ERROR].append(comp_item)
+                continue
+
+            # Determine if identical based on size, mtime, and (if enabled) hash
+            is_identical_size = (comp_item.size_source == comp_item.size_target)
+            is_identical_mtime = (abs(comp_item.mtime_ns_source / 1_000_000_000 - comp_item.mtime_ns_target / 1_000_000_000) <= time_tolerance_seconds)
+
+            needs_hash_check = hash_check_enabled and is_identical_size and is_identical_mtime
+            hash_match = False
+
+            if needs_hash_check:
+                try:
+                    # Assume source_scanned_item.full_path and target_scanned_item.full_path exist
+                    comp_item.hash_source = calculate_hash(source_scanned_item.full_path, hash_algorithm)
+                    comp_item.hash_target = calculate_hash(target_scanned_item.full_path, hash_algorithm)
+                    hash_match = (comp_item.hash_source == comp_item.hash_target)
+                except Exception as e:
+                    comp_item.comparison_error_message = f"Hash calculation error: {e}"
+                    comparison_results_dict[REPORT_COMPARE_ERROR].append(comp_item)
+                    continue # Skip this item due to error
+
+            is_truly_identical = False
+            if is_identical_size and is_identical_mtime:
+                if hash_check_enabled:
+                    if hash_match:
+                        is_truly_identical = True
+                else: # No hash check, so size and mtime are enough
+                    is_truly_identical = True
+
+            if is_truly_identical:
+                comparison_results_dict[REPORT_IDENTICAL].append(comp_item)
+                continue # Move to next item
+
+            # If not identical, then it's different. Determine which is newer.
+            # This logic is reached if:
+            # 1. Sizes differ (is_identical_size is False)
+            # 2. Sizes are identical, but mtimes differ significantly (is_identical_mtime is False)
+            # 3. Sizes and mtimes are identical, but hash_check is enabled and hashes differ.
+            if comp_item.mtime_ns_source > comp_item.mtime_ns_target:
+                comparison_results_dict[REPORT_DIFFERENT_CONTENT_SOURCE_NEWER].append(comp_item)
+            elif comp_item.mtime_ns_target > comp_item.mtime_ns_source:
+                comparison_results_dict[REPORT_DIFFERENT_CONTENT_TARGET_NEWER].append(comp_item)
+            else: # mtimes are identical, but sizes or hashes differ (if hash check enabled)
+                # This implies size mismatch OR (size match AND mtime match AND hash mismatch)
+                comp_item.comparison_error_message = f"File mismatch (size or hash) with identical mtimes: {comp_item.size_source} vs {comp_item.size_target}"
+                comparison_results_dict[REPORT_COMPARE_ERROR].append(comp_item)
+
+        except Exception as e: # Catch any unexpected error during file comparison
+            comp_item.comparison_error_message = f"Unexpected comparison error: {e}"
+            comparison_results_dict[REPORT_COMPARE_ERROR].append(comp_item)
+
+    print("Finished comparing items")
+    return comparison_results_dict
+
+# --- Argument Parsing Function ---

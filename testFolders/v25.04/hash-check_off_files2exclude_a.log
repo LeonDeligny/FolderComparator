@@ -1,0 +1,111 @@
+
+Scanning folder              : /home/gehri/sources/tools/python_scripts/folder_comparator/testFolders/source_dir ...
+Finished scanning folder     : /home/gehri/sources/tools/python_scripts/folder_comparator/testFolders/source_dir
+
+Scanning folder              : /home/gehri/sources/tools/python_scripts/folder_comparator/testFolders/target_dir ...
+Finished scanning folder     : /home/gehri/sources/tools/python_scripts/folder_comparator/testFolders/target_dir
+
+Comparing items...
+Finished comparing items.
+
+================================================================================
+--------------------------- Folder Comparison Report ---------------------------
+================================================================================
+
+Date                                 : Tue Jul 15 19:19:35 UTC+7 2025
+folder_comparator.py                 : version v25.04 (06-July-2025)
+Source                               : /home/gehri/sources/tools/python_scripts/folder_comparator/testFolders/source_dir
+Target                               : /home/gehri/sources/tools/python_scripts/folder_comparator/testFolders/target_dir
+Time Tolerance for IDENTICAL Files   : 1.0 seconds
+Hash Check                           : Disabled 
+(Files considered IDENTICAL based on identical size and timestamp within tolerance.)
+Exclusion patterns loaded from file  : files2exclude_a.txt (69 patterns)
+Total exclusion patterns in effect   : 69 patterns
+**/toto/activate*, **/toto/.alias*, **/toto/deactivate*, **/toto/help_me.txt, **/toto/.nvidia-settings-rc, **/toto/.setenv, **/toto/.setenv.bu, **/toto/.ssh/, **/toto/.tcshrc, **/toto/venv_p3/, **/toto/virtualenv/, **/.aienv*_cache/, **/.ansys/, **/*.bash_*, **/*.cache/, **/.cinnamon/, **/.config/, **/.cups/, **/.davfs2/, **/.dbus/, **/.dmrc, **/.dropbox*, **/Dropbox/, **/Desktop/, **/.emacs.d/, **/.esd_auth, **/.esmtp_queue/, **/.gconf/, **/.gimp*/, **/.gnome*/, **/.gnupg/, **/google-earth/, **/.gphoto/, **/GPUCache/, **/.gstreamer-0.10/, **/.gtk*/, **/.gvfs/, **/.history, **/.ICEauthority, **/.icons/, **/.kde*/, **/Library/, **/.local/, **/.login, **/lost+found/, **/.luckyBackup/, **/mnt/, **/.mozilla, **/.nedit/, **/nextcloud/, **/.nv/, **/.oracle_jre_usage/, **/.pki/, **/.pulse*, **/.sbd/, **/.serverauth*, **/.python_history, **/.skel/, **/snap/, **/.texlive*, **/thinclient_drives/, **/.thumbnails/, **/.var/, **/.vmware/, **/.vnc/, **/.tk_recent_files, **/.Xauthority*, **/.xmaximarc, **/.xsession-errors
+
+ 1. Broken Symbolic Links found in Source.
+    Total: 2 items
+    Source Broken Symlinks:
+      toto/link1
+      toto/s1/link2
+
+ 2. Broken Symbolic Links found in Target.
+    Total: 2 items
+    Target Broken Symlinks:
+      toto/link1
+      toto/t1/link1
+
+ 3. Files existing ONLY in Source.
+    Total: 12 items, size 60.33 MB (1 directories, 11 files)
+      toto/.aienv_options
+      toto/.aienv_options.211122.ok
+      toto/.aienv_options.dominique
+      toto/.aienv_options.jan
+      toto/s1/
+      toto/s1/.alias.csh
+      toto/s1/abc
+      toto/s1/activate-smr2.csh
+      toto/s1/log16
+      toto/s1/msort.F
+      toto/s1/txt1
+      toto/txt
+
+ 4. Files existing ONLY in Target.
+    Total: 7 items, size 60.31 MB (2 directories, 5 files)
+      toto/TXT
+      toto/t1/
+      toto/t1/.alias.csh
+      toto/t1/TXT1
+      toto/t1/abc/
+      toto/t1/log16
+      toto/t1/msort.F
+
+ 5. Files in Source AND Target that are IDENTICAL (same size AND timestamps within tolerance, NO HASH-CHECK)
+    Total: 3 files, size 60.3 MB
+      folder1/
+      folder2/
+      toto/
+      toto/diffMtime0.8-contentDiff.txt
+      toto/diffMtime0.8.txt
+      toto/log16
+
+ 6. Files in Source AND Target that are DIFFERENT, and SOURCE is newer.
+    Total: 2 files, size 11.72 KB
+      toto/Snewer.txt
+      toto/msort.F
+
+ 7. Files in Source AND Target that are DIFFERENT, and TARGET is newer.
+    Total: 1 files, size 187.0 Bytes
+      toto/Tnewer.txt
+
+ 8. Excluded Files/Folders (based on --exclude patterns).
+    Total: Source 5 items, Target 3 items
+    Source Excluded:
+      toto/.aienv_fea2.019.2_cache/ (matched by '**/.aienv*_cache/')
+      toto/.aienv_fea2.019.4_cache/ (matched by '**/.aienv*_cache/')
+      toto/.aienv_fea2.021.2_cache/ (matched by '**/.aienv*_cache/')
+      toto/.alias.csh (matched by '**/toto/.alias*')
+      toto/activate-smr2.csh (matched by '**/toto/activate*')
+    Target Excluded:
+      toto/.alias.csh (matched by '**/toto/.alias*')
+      toto/.tcshrc (matched by '**/toto/.tcshrc')
+      toto/.texlive2018/ (matched by '**/.texlive*')
+
+ 9. Items with Different Type (File vs. Folder) found in both Source and Target.
+    Total: 1 items (files/directories)
+      toto/abc (File vs Directory)
+
+10. Comparison Errors.
+    Total: 0 items
+
+Notes on categories 6. and 7.
+6. 176.0 Bytes = Net change in size of target_dir if the old files
+                 were replaced by the new ones from source_dir
+7. 176.0 Bytes = Net change in size of source_dir if the old files
+                 were replaced by the new ones from target_dir
+
+Total CPU elapsed wall clock time: 0.01 seconds
+
+================================================================================
+-------------------------------- End of Report ---------------------------------
+================================================================================

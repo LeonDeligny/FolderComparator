@@ -1,0 +1,46 @@
+--- folder_comparator_v26.00.py Part 03/12
+def _glob_to_regex_core(glob_pattern_normalized):
+    """
+    Converts a normalized global pattern into a regular expression.
+    Handles wildcards ‘*’, ‘**’, ‘?’, and escapes other special regex characters.
+    Adds NO anchors (^, $, or /) - these are added by the calling function.
+    If ‘**’ is present in the global pattern, ‘*’ will also match slashes.
+    """
+    regex_parts = []
+
+    has_recursive_wildcard = '**' in glob_pattern_normalized
+
+    parts = glob_pattern_normalized.split('**')
+
+    for i, part_containing_slashes in enumerate(parts):
+        if i > 0: # If this is not the first part, it was preceded by '**'
+            regex_parts.append('.*') # '**' matches everything, including slashes
+
+        # Process the current part, which might contain literal slashes
+        # The key here is how we handle leading slashes in parts, and how * and ? behave.
+
+        # Split by literal slashes *without escaping them here yet*
+        segments = part_containing_slashes.split('/')
+
+        for j, segment in enumerate(segments):
+            if j > 0: # Add a literal slash if not the first segment in this part
+                regex_parts.append('/')
+
+            # Escape regex special characters in the segment
+            escaped_segment = re.escape(segment)
+
+            # Replace glob wildcards with regex equivalents based on `has_recursive_wildcard`
+            if has_recursive_wildcard:
+                escaped_segment = escaped_segment.replace(re.escape('*'), '.*')
+                escaped_segment = escaped_segment.replace(re.escape('?'), '.')
+            else:
+                escaped_segment = escaped_segment.replace(re.escape('*'), '[^/]*')
+                escaped_segment = escaped_segment.replace(re.escape('?'), '[^/]')
+
+            regex_parts.append(escaped_segment)
+
+    # Special handling for patterns starting with '/': anchor to start of path
+    # But `_glob_to_regex_core` should not add anchors, so this is just a comment for caller.
+
+    return "".join(regex_parts)
+
