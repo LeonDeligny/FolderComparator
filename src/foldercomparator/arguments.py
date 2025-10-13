@@ -10,15 +10,6 @@ def get_arguments():
     Returns:
         argparse.Namespace: An object containing the parsed arguments.
     """
-    # --- Python Version Check ---
-    # Define the minimum required Python version (e.g., 3.8 for standard fnmatch.translate behavior)
-    MIN_PYTHON_VERSION = (3, 8)
-    if sys.version_info < MIN_PYTHON_VERSION:
-        print(f"Error: This script requires Python {MIN_PYTHON_VERSION[0]}.{MIN_PYTHON_VERSION[1]} or higher.", file=sys.stderr)
-        print(f"You are currently using Python {sys.version_info.major}.{sys.version_info.minor}.", file=sys.stderr)
-        print("Please use `python3.11` if available, or upgrade your Python version.", file=sys.stderr)
-        sys.exit(1)
-
     WRAP_WIDTH = 78 
 
     main_description_raw = "Compares folders based on existence, modification dates, size, and optionally SHA256/MD5 hash, generating a detailed report."
