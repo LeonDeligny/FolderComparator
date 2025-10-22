@@ -74,7 +74,7 @@ def get_arguments():
     parser.add_argument("--exclude", nargs='*', default=[],
                         help="One or more shell-style patterns (e.g., '*.tmp' 'project/temp*' 'cache/') to exclude files or folders. "
                              "Directory patterns should end with a slash.")
-    parser.add_argument("--exclude-file", help="Path to a file containing shell-style patterns to exclude (one pattern per line, # for comments).")
+    parser.add_argument("--exclude-file", help="Path to a file containing shell-style patterns to exclude (one pattern per line, # for comments).", default=False)
     parser.add_argument("--time-tolerance", type=float, default=1.0,
                         help="Maximum time difference in seconds (e.g., 0.001 for 1ms) "
                              "for two file modification timestamps to be considered IDENTICAL, along with identical size. "

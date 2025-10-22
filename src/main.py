@@ -130,6 +130,8 @@ def main():
     # Add patterns from command line
     if args.exclude:
         all_exclude_patterns.extend(args.exclude)
+    else:
+        print('No files to exclude.')
 
     # Add patterns from exclude file
     if args.exclude_file:
@@ -150,6 +152,8 @@ def main():
         except Exception as e:
             print(f"Error reading exclusion file '{args.exclude_file}': {e}", file=sys.stderr)
             sys.exit(1)
+    else:
+        num_patterns_from_exclude_file = 0
 
     # Clean and validate folder paths
     source_folder_cleaned = os.path.abspath(args.source_folder)

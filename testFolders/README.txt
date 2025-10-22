@@ -1,5 +1,7 @@
 python3.11 src/main.py --exclude-file testFolders/files2exclude_a.txt --time-tolerance 1 --hash-check -- testFolders/source_dir/ testFolders/target_dir/ > testFolders/hash-check_off_files2exclude_a2.logcd testFolders
 
+python3.11 src/main.py --time-tolerance 1 --hash-check -- testFolders/source_dir/ testFolders/target_dir/ > testFolders/hash-check_off_files2exclude_a2.logcd
+
 Using files2exclude_a.txt
 -------------------------
 python3.11 ../../folder_comparator.py --exclude-file files2exclude_a.txt --time-tolerance 1              -- source_dir/ target_dir/ > hash-check_off_files2exclude_a.log
