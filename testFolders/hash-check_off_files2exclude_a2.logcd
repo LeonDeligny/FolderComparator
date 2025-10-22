@@ -12,7 +12,7 @@ Finished comparing items
 --------------------------- Folder Comparison Report ---------------------------
 ================================================================================
 
-Date                               : Wed Oct 22 12:20:56 UTC+2 2025
+Date                               : Wed Oct 22 12:23:27 UTC+2 2025
 folder_comparator.py               
 Source                             : /users/disk12/cfse2/Leon/FolderComparator/testFolders/source_dir
 Target                             : /users/disk12/cfse2/Leon/FolderComparator/testFolders/target_dir
@@ -20,7 +20,9 @@ Time Tolerance for IDENTICAL Files : 1.0 seconds
 Hash Check                         : md5 (Files considered IDENTICAL based
                                      on identical size and timestamp within
                                      tolerance, AND identical hash)
-No exclusion patterns in effect.
+Exclusion patterns loaded from file: testFolders/files2exclude_a.txt (69 patterns)
+Total exclusion patterns in effect : 69 patterns
+**/toto/activate*, **/toto/.alias*, **/toto/deactivate*, **/toto/help_me.txt, **/toto/.nvidia-settings-rc, **/toto/.setenv, **/toto/.setenv.bu, **/toto/.ssh/, **/toto/.tcshrc, **/toto/venv_p3/, **/toto/virtualenv/, **/.aienv*_cache/, **/.ansys/, **/*.bash_*, **/*.cache/, **/.cinnamon/, **/.config/, **/.cups/, **/.davfs2/, **/.dbus/, **/.dmrc, **/.dropbox*, **/Dropbox/, **/Desktop/, **/.emacs.d/, **/.esd_auth, **/.esmtp_queue/, **/.gconf/, **/.gimp*/, **/.gnome*/, **/.gnupg/, **/google-earth/, **/.gphoto/, **/GPUCache/, **/.gstreamer-0.10/, **/.gtk*/, **/.gvfs/, **/.history, **/.ICEauthority, **/.icons/, **/.kde*/, **/Library/, **/.local/, **/.login, **/lost+found/, **/.luckyBackup/, **/mnt/, **/.mozilla, **/.nedit/, **/nextcloud/, **/.nv/, **/.oracle_jre_usage/, **/.pki/, **/.pulse*, **/.sbd/, **/.serverauth*, **/.python_history, **/.skel/, **/snap/, **/.texlive*, **/thinclient_drives/, **/.thumbnails/, **/.var/, **/.vmware/, **/.vnc/, **/.tk_recent_files, **/.Xauthority*, **/.xmaximarc, **/.xsession-errors
 
 Note on Size Calculation Logic:
 - Regular Files  :  Their actual byte size is used.
@@ -50,12 +52,11 @@ Note on Size Calculation Logic:
       toto/t1/link1
 
  3. Files existing ONLY in Source.
-    Total: 13 items, size 60.33 MB (1 directories, 12 files)
+    Total: 12 items, size 60.33 MB (1 directories, 11 files)
       toto/.aienv_options (source size: 4761 bytes)
       toto/.aienv_options.211122.ok (source size: 4699 bytes)
       toto/.aienv_options.dominique (source size: 4444 bytes)
       toto/.aienv_options.jan (source size: 4408 bytes)
-      toto/activate-smr2.csh (source size: 1003 bytes)
       toto/s1/ (source size: None bytes)
       toto/s1/.alias.csh (source size: 3454 bytes)
       toto/s1/abc (source size: 0 bytes)
@@ -66,16 +67,7 @@ Note on Size Calculation Logic:
       toto/txt (source size: 14 bytes)
 
  4. Files existing ONLY in Target.
-    Total: 16 items, size 61.74 MB (5 directories, 11 files)
-      toto/.tcshrc (target size: 0 bytes)
-      toto/.texlive2018/ (target size: None bytes)
-      toto/.texlive2018/texmf-var/ (target size: None bytes)
-      toto/.texlive2018/texmf-var/web2c/ (target size: None bytes)
-      toto/.texlive2018/texmf-var/web2c/pdftex/ (target size: None bytes)
-      toto/.texlive2018/texmf-var/web2c/pdftex/latex.fmt (target size: 734043 bytes)
-      toto/.texlive2018/texmf-var/web2c/pdftex/latex.log (target size: 11173 bytes)
-      toto/.texlive2018/texmf-var/web2c/pdftex/pdflatex.fmt (target size: 734105 bytes)
-      toto/.texlive2018/texmf-var/web2c/pdftex/pdflatex.log (target size: 11361 bytes)
+    Total: 7 items, size 60.31 MB (1 directories, 6 files)
       toto/TXT (target size: 20 bytes)
       toto/abc/.gitignore (target size: 70 bytes)
       toto/t1/ (target size: None bytes)
@@ -96,16 +88,22 @@ Note on Size Calculation Logic:
     Total: 0 files, size 0 Bytes
 
  7. Files in Source AND Target that are DIFFERENT, and TARGET is newer.
-    Total: 4 files, size 3.37 KB
+    Total: 3 files, size 200.0 Bytes
     Net change in source_dir size if old files were replaced by
-    new files from target_dir: -208.0 Bytes
-      toto/.alias.csh (source size: 3454 bytes, target size: 3246 bytes)
+    new files from target_dir: 0 Bytes
       toto/Snewer.txt (source size: 187 bytes, target size: 11 bytes)
       toto/Tnewer.txt (source size: 11 bytes, target size: 187 bytes)
       toto/diffMtime0.8-contentDiff.txt (source size: 2 bytes, target size: 2 bytes)
 
  8. Excluded Files/Folders (based on --exclude patterns).
-    Total: Source 0 items, Target 0 items
+    Total: Source 2 items, Target 3 items
+    Source Excluded:
+      toto/.alias.csh (matched by '**/toto/.alias*')
+      toto/activate-smr2.csh (matched by '**/toto/activate*')
+    Target Excluded:
+      toto/.alias.csh (matched by '**/toto/.alias*')
+      toto/.tcshrc (matched by '**/toto/.tcshrc')
+      toto/.texlive2018/ (matched by '**/.texlive*')
 
  9. Items with Different Type (File vs. Folder) found in both Source and Target.
     Total: 1 items (files/directories)
@@ -115,7 +113,7 @@ Note on Size Calculation Logic:
     Total: 0 items
 
 
-Total CPU elapsed wall clock time: 0.16 seconds
+Total CPU elapsed wall clock time: 0.17 seconds
 
 ================================================================================
 -------------------------------- End of Report ---------------------------------
